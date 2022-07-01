@@ -1,0 +1,221 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "usermeta": {
+      "deneb": {
+        "build": "1.2.0.1",
+        "metaVersion": 1,
+        "provider": "vegaLite",
+        "providerVersion": "5.2.0"
+      },
+      "interactivity": {
+        "tooltip": true,
+        "contextMenu": true,
+        "selection": false,
+        "highlight": false,
+        "dataPointLimit": 50
+      },
+      "information": {
+        "name": "[No Name Provided]",
+        "description": "[No Description Provided]",
+        "author": "[No Author Details Provided]",
+        "uuid": "a035a436-c46d-44d7-a606-dd6ea983a5cf",
+        "generated": "2022-07-01T07:38:35.518Z"
+      },
+      "dataset": [
+        {
+          "key": "__0__",
+          "name": "Month-Year",
+          "description": "",
+          "type": "text",
+          "kind": "column"
+        },
+        {
+          "key": "__1__",
+          "name": "Actual",
+          "description": "",
+          "type": "numeric",
+          "kind": "measure"
+        },
+        {
+          "key": "__2__",
+          "name": "Prior Year",
+          "description": "",
+          "type": "numeric",
+          "kind": "measure"
+        }
+      ]
+    },
+    "config": {
+      "autosize": {
+        "type": "fit",
+        "contains": "padding"
+      },
+      "style": {
+        "cell": {"stroke": "transparent"}
+      }
+    },
+    "data": {"name": "dataset"},
+    "transform": [
+      {
+        "calculate": "datum['__1__'] - datum['__2__']",
+        "as": "abs_diff"
+      }
+    ],
+    "spacing": 0,
+    "vconcat": [
+      {
+        "width": 300,
+        "height": 150,
+        "encoding": {
+          "y": {
+            "field": "abs_diff",
+            "type": "quantitative",
+            "axis": {
+              "orient": "left",
+              "offset": 10,
+              "format": ".2s",
+              "title": "Variance",
+              "gridOpacity": 0.5,
+              "gridColor": {
+                "condition": {
+                  "test": "datum.value == 0",
+                  "value": "black"
+                },
+                "value": "lightgrey"
+              }
+            }
+          },
+          "x": {
+            "field": "__0__",
+            "type": "nominal",
+            "axis": null,
+            "sort": {
+              "op": "sum",
+              "field": "Month",
+              "order": "ascending"
+            }
+          },
+          "color": {
+            "condition": {
+              "test": "datum.abs_diff < 0",
+              "value": "red"
+            },
+            "value": "green"
+          }
+        },
+        "layer": [
+          {
+            "mark": {
+              "type": "bar",
+              "width": 4
+            }
+          },
+          {
+            "mark": {
+              "type": "text",
+              "size": 8,
+              "align": "center",
+              "baseline": {
+                "expr": "datum.abs_diff < 0 ? 'top' : 'bottom'"
+              },
+              "dy": {
+                "expr": "datum.abs_diff < 0 ? 5 : -5"
+              }
+            },
+            "encoding": {
+              "text": {
+                "field": "abs_diff",
+                "type": "quantitative",
+                "format": ".2s"
+              },
+              "color": {"value": "grey"}
+            }
+          }
+        ]
+      },
+      {
+        "width": 300,
+        "height": 250,
+        "layer": [
+          {
+            "mark": {
+              "type": "bar",
+              "tooltip": true,
+              "xOffset": 0,
+              "width": {"band": 0.5},
+              "color": "black",
+              "opacity": 0.9
+            },
+            "encoding": {
+              "y": {
+                "field": "__1__",
+                "type": "quantitative",
+                "axis": {
+                  "grid": false,
+                  "orient": "left",
+                  "format": ".2s",
+                  "offset": 10
+                }
+              }
+            }
+          },
+          {
+            "mark": {
+              "type": "bar",
+              "tooltip": true,
+              "xOffset": 5,
+              "width": {"band": 0.5},
+              "color": "grey",
+              "opacity": 0.4,
+              "fill": "url(#diagonal-stripe-1",
+              "stroke": "black"
+            },
+            "encoding": {
+              "y": {
+                "field": "__2__",
+                "type": "quantitative"
+              }
+            }
+          },
+          {
+            "mark": {
+              "type": "text",
+              "size": 8,
+              "fontWeight": "bold",
+              "xOffset": -7,
+              "yOffset": -5,
+              "align": "left"
+            },
+            "encoding": {
+              "text": {
+                "field": "__1__",
+                "format": ".2s"
+              },
+              "y": {
+                "field": "__1__",
+                "type": "quantitative"
+              }
+            }
+          }
+        ],
+        "encoding": {
+          "x": {
+            "field": "__0__",
+            "type": "nominal",
+            "sort": {
+              "op": "sum",
+              "field": "Month",
+              "order": "ascending"
+            },
+            "axis": {
+              "ticks": true,
+              "title": null,
+              "labels": true,
+              "labelLimit": 150,
+              "labelFontSize": 10
+            }
+          }
+        }
+      }
+    ]
+  }
